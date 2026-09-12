@@ -3,23 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BIN_D3C0D3R // withoutshiny</title>
+<title>BIN DECODER</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;font-family:'JetBrains Mono',monospace}
-body{background:#050805;color:#00ff41;min-height:100vh;padding:20px}
-h1{font-size:2.2rem;text-align:center;letter-spacing:0.2em;text-shadow:0 0 10px #00ff41}
-.subtitle{text-align:center;opacity:0.6;font-size:0.8rem;margin-bottom:25px}
-.container{max-width:900px;margin:0 auto;display:grid;gap:20px}
-.card{background:rgba(0,20,5,0.8);border:1px solid #00ff41;box-shadow:0 0 20px rgba(0,255,65,0.2);padding:18px;border-radius:8px}
-.card h2{font-size:0.9rem;margin-bottom:12px}
-.card h2 span{background:#00ff41;color:#000;padding:2px 6px;margin-right:8px}
-textarea{width:100%;background:#000;border:1px solid #00a82a;color:#00ff41;padding:12px;min-height:130px;resize:vertical;outline:none;font-size:0.95rem;border-radius:4px}
-textarea:focus{border-color:#00ff41;box-shadow:0 0 10px rgba(0,255,65,0.4)}
-.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-button{background:#000;border:1px solid #00ff41;color:#00ff41;padding:8px 14px;cursor:pointer;border-radius:4px;font-weight:700}
-button:hover{background:#00ff41;color:#000}
-button.danger{border-color:#ff3b3b;color:#ff3b3b}
-button.danger:hover{background:#ff3b3b;color:#000}
-.status{font-size:0.75rem;margin-top:8px;min-height:18px
-<h1>Meu site privado</h1><p>ta funcionando</p>
+body{background:#000;color:#0f0;font-family:monospace;padding:15px}
+h1{text-align:center;border:1px solid #0f0;padding:10px}
+textarea{width:100%;background:#111;color:#0f0;border:1px solid #0f0;padding:10px;min-height:110px}
+button{background:#000;color:#0f0;border:1px solid #0f0;padding:8px;margin:4px;cursor:pointer}
+button:hover{background:#0f0;color:#000}
+.card{border:1px solid #0f0;padding:12px;margin:15px 0}
+</style>
+</head>
+<body>
+<h1>BIN DECODER - withoutshiny</h1>
+<div class="card">
+<b>BINARIO -> TEXTO</b><br><br>
+<textarea id="bin" placeholder="01001000 01100101 01101100 01101100 01101111"></textarea><br>
+<button onclick="decode()">DECODE</button>
+<button onclick="bugBin()" style="color:red;border-color:red">BUG IT</button><br><br>
+<textarea id="txt" readonly placeholder="resultado..."></textarea>
+<div id="status"></div>
+</div>
+<div class="card">
+<b>TEXTO -> BINARIO</b><br><br>
+<textarea id="txt2" placeholder="Hello"></textarea><br>
+<button onclick="encode()">ENCODE</button><br><br>
+<textarea id="bin2" readonly></textarea>
+</div>
+<script>
+function decode(){
+let b=document.getElementById('bin').value.replace(/[^01]/g,'');
+let r='';let e=0;
+if(b.length%8!=0){document.getElementById('status').innerHTML='BUG: '+b.length+' bits não é multiplo de 8';}
+for(let i=0;i<b.length;i+=8){
+let c=b.slice(i,i+8);if(c.length<8){e++;continue}
+r+=String.fromCharCode(parseInt(c,2));
+}
+document.getElementById('txt').value=r;
+}
+function encode(){
+let t=document.getElementById('txt2').value;
+let o=[];for(let i=0;i<t.length;i++)o.push(t.charCodeAt(i).toString(2).padStart(8,'0'));
+document.getElementById('bin2').value=o.join(' ');
+}
+function bugBin(){
+let pays=["0100100","01001000 00 02 99","0".repeat(4000),"11111111 11111111"];
+document.getElementById('bin').value=pays[Math.floor(Math.random()*pays.length)];
+decode();
+}
+</script>
+</body>
+</html>
